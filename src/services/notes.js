@@ -30,3 +30,12 @@ export const removeNote = ({ id }) => {
       return getNotesDb().remove(doc)
     })
 }
+
+export const getNotes = () => {
+  return getNotesDb()
+    .allDocs({
+      include_docs: true,
+      attachments: true,
+    })
+    .then((result) => result.rows)
+}

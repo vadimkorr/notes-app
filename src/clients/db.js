@@ -7,6 +7,7 @@ export const getNotesDb = () => {
   return localDB
 }
 
+// cancel replication on logout, remove local db
 export const sync = () => {
   localDB
     .sync(remoteDb, {
