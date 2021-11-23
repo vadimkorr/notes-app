@@ -1,11 +1,15 @@
 import React, { useEffect } from 'react'
 import logo from './logo.svg'
 import './App.css'
-import { getInfo } from './services/notes'
+import { getInfo, getNote, putNote } from './services/notes'
 
 function App() {
   useEffect(() => {
     getInfo()
+    // putNote({ title: 'new note', text: 'hello' })
+    getNote({ id: '7946f1f6-efeb-4128-bc40-58f4a7aff2af' }).then((value) => {
+      console.log('NOTE', value)
+    })
   }, [])
 
   return (

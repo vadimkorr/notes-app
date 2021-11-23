@@ -4,6 +4,9 @@ import './index.css'
 import App from './App'
 import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
+import { sync } from './clients/db'
+
+sync()
 
 ReactDOM.render(
   <React.StrictMode>
