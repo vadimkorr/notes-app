@@ -1,7 +1,12 @@
 import PouchDB from 'pouchdb'
 
 const localDB = new PouchDB('notes')
-const remoteDb = new PouchDB('http://localhost:5984/notes')
+const remoteDb = new PouchDB('http://localhost:5984/notes', {
+  auth: {
+    username: 'admin',
+    password: '@dmin',
+  },
+})
 
 export const getNotesDb = () => {
   return localDB
