@@ -1,0 +1,215 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2021-11-27T20:30:48.994Z",
+  "__export_source": "insomnia.desktop.app:v2021.6.0",
+  "resources": [
+    {
+      "_id": "req_aa75d54656684111b496d344542dffd9",
+      "parentId": "wrk_9b11676ddde541e48c334d09ad26cffe",
+      "modified": 1638042662641,
+      "created": 1638037647583,
+      "url": "{{ _.BASE_URL }}/api/v1/user-quotes",
+      "name": "add quote to favorite",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"quote_id\": \"596a6752-12a0-4c8b-8630-5679e42d1b99\",\n\t\"favorite\": true\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_c250d149f69f4a768a74ee35007b3ada"
+        },
+        {
+          "name": "user_id",
+          "value": "1",
+          "description": "",
+          "id": "pair_b84baa2d47e148778eee8522ab2dac73"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1638037647583,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "wrk_9b11676ddde541e48c334d09ad26cffe",
+      "parentId": null,
+      "modified": 1638034472361,
+      "created": 1638034472362,
+      "name": "Quotes service",
+      "description": "",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_d20e868874ea4530bea15bef284e661e",
+      "parentId": "wrk_9b11676ddde541e48c334d09ad26cffe",
+      "modified": 1638042963430,
+      "created": 1638038739110,
+      "url": "{{ _.BASE_URL }}/api/v1/user-quotes",
+      "name": "remove quote from favorite",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"quote_id\": \"596a6752-12a0-4c8b-8630-5679e42d1b99\",\n\t\"favorite\": false\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json",
+          "id": "pair_c250d149f69f4a768a74ee35007b3ada"
+        },
+        {
+          "name": "user_id",
+          "value": "1",
+          "description": "",
+          "id": "pair_b84baa2d47e148778eee8522ab2dac73"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1638037273676.5,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_82d382263dc040c4b40ba41e211453ce",
+      "parentId": "wrk_9b11676ddde541e48c334d09ad26cffe",
+      "modified": 1638044344342,
+      "created": 1638042684421,
+      "url": "{{ _.BASE_URL }}/api/v1/user-quotes/596a6752-12a0-4c8b-8630-5679e42d1b99",
+      "name": "get user quote",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "user_id",
+          "value": "1",
+          "description": "",
+          "id": "pair_3f4c1cff98a6452381f86fa99a9a5826"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1638037086723.25,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_343feae459c7415bb88c8cad3c4aa123",
+      "parentId": "wrk_9b11676ddde541e48c334d09ad26cffe",
+      "modified": 1638042700299,
+      "created": 1638038887683,
+      "url": "{{ _.BASE_URL }}/api/v1/user-quotes",
+      "name": "get favorite quotes",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [
+        {
+          "name": "user_id",
+          "value": "1",
+          "description": "",
+          "id": "pair_3f4c1cff98a6452381f86fa99a9a5826"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1638036993246.625,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_0a2e634413ae437eb6888cca45fb147b",
+      "parentId": "wrk_9b11676ddde541e48c334d09ad26cffe",
+      "modified": 1638042718760,
+      "created": 1638036899770,
+      "url": "{{ _.BASE_URL }}/api/v1/quotes",
+      "name": "get random quote",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1638036899770,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_5d17b7971b403b4acbb7abb6107cbbefe3455415",
+      "parentId": "wrk_9b11676ddde541e48c334d09ad26cffe",
+      "modified": 1638037056825,
+      "created": 1638034472444,
+      "name": "Base Environment",
+      "data": {
+        "BASE_URL": "http://localhost:3100"
+      },
+      "dataPropertyOrder": {
+        "&": [
+          "BASE_URL"
+        ]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1638034472444,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_5d17b7971b403b4acbb7abb6107cbbefe3455415",
+      "parentId": "wrk_9b11676ddde541e48c334d09ad26cffe",
+      "modified": 1638034472447,
+      "created": 1638034472447,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "spc_1336b241aaa445ca9a4e747e27d7605f",
+      "parentId": "wrk_9b11676ddde541e48c334d09ad26cffe",
+      "modified": 1638034472370,
+      "created": 1638034472370,
+      "fileName": "Quotes service",
+      "contents": "",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    }
+  ]
+}
