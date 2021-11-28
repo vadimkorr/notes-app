@@ -1,0 +1,14 @@
+.layout__main-container {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+}
+
+.layout__content-container {
+  flex: 1;
+}
+
+.layout__nav-container {
+}

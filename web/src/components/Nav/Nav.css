@@ -1,0 +1,6 @@
+.nav__main-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 20px;
+  background-color: aquamarine;
+}

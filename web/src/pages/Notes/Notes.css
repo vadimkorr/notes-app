@@ -1,0 +1,13 @@
+.notes__main-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.notes__notes-container {
+  flex: 1;
+}
+.notes__quotes-container {
+  flex: 0 0 130px;
+}
