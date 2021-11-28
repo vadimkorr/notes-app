@@ -19,6 +19,16 @@ export const putNote = ({ title, text }) => {
   return getNotesDb().put(doc)
 }
 
+export const updateNote = ({ title, text, note }) => {
+  const doc = {
+    _id: note._id,
+    _rev: note._rev,
+    title,
+    text,
+  }
+  return getNotesDb().put(doc)
+}
+
 export const getNote = ({ id }) => {
   return getNotesDb().get(id)
 }

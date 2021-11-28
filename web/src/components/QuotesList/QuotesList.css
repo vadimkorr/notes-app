@@ -1,0 +1,12 @@
+.quotes-list__main-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 25px 25px 25px 25px;
+  box-sizing: border-box;
+}
+
+.quotes-list__main-container > *:not(:last-child) {
+  margin-bottom: 10px;
+}

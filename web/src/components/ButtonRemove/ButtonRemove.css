@@ -1,0 +1,4 @@
+.button-remove__icon {
+  cursor: pointer;
+  user-select: none;
+}

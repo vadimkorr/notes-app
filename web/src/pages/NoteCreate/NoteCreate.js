@@ -1,5 +1,6 @@
+import NoteForm from '../../components/NoteForm'
 import './NoteCreate.css'
 
 export const NoteCreate = () => {
-  return <div>Create note</div>
+  return <NoteForm />
 }
