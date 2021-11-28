@@ -1,0 +1,46 @@
+.notes-list__main-container {
+  position: absolute;
+  inset: 0;
+  padding: 25px 25px 0 25px;
+  box-sizing: border-box;
+
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-gap: 10px;
+  grid-auto-rows: min-content;
+}
+
+.notes-list__main-container::after {
+  content: '';
+  position: relative;
+  height: 15px;
+  width: 100%;
+}
+
+@media (min-width: 576px) {
+}
+
+@media (min-width: 768px) {
+  .notes-list__main-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 992px) {
+}
+
+@media (min-width: 1200px) {
+  .notes-list__main-container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1400px) {
+  .notes-list__main-container {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.notes-list__note-card-container {
+  height: 200px;
+}

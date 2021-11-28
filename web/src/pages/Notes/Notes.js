@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getInfo, getNotes } from '../../services/notes'
 import Quote from '../../components/Quote'
+import NotesList from '../../components/NotesList'
 import './Notes.css'
 
 export const Notes = () => {
@@ -16,13 +17,10 @@ export const Notes = () => {
 
   return (
     <div className="notes__main-container">
-      <ul className="notes__notes-container">
-        {notes.map((note) => (
-          <li key={note.id}>
-            {note.doc.title} : {note.doc.text}
-          </li>
-        ))}
-      </ul>
+      <div className="notes__notes-list-container">
+        <NotesList items={notes} />
+      </div>
+
       <div className="notes__quotes-container">
         <Quote />
       </div>

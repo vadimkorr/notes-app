@@ -1,0 +1,13 @@
+.note-card__main-container {
+  border-radius: 10px;
+  background-color: #c0c0c0;
+  padding: 5px 10px;
+  box-sizing: border-box;
+  height: 100%;
+}
+.note-card__title {
+  margin: 0;
+}
+.note-card__text {
+  margin: 0;
+}

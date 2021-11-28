@@ -17,7 +17,6 @@ const Router = () => (
             <Route path=":noteId" element={<NoteEdit />} />
             <Route path="new" element={<NoteCreate />} />
           </Route>
-
           <Route path="quotes" element={<Quotes />} />
         </Route>
       </Routes>
