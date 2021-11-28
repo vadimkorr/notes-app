@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './App.css'
 import { getInfo, getNotes } from './services/notes'
+import Quote from './components/Quote'
 
 function App() {
   const [notes, setNotes] = useState([])
@@ -14,8 +15,8 @@ function App() {
   }, [])
 
   return (
-    <div className="App">
-      <ul>
+    <div className="app__main-container">
+      <ul className="app__notes-container">
         {notes.map((note) => {
           return (
             <li key={note.id}>
@@ -24,6 +25,9 @@ function App() {
           )
         })}
       </ul>
+      <div className="app__quotes-container">
+        <Quote />
+      </div>
     </div>
   )
 }
