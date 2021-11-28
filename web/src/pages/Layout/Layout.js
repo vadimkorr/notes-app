@@ -1,15 +1,17 @@
-import { Link, Outlet } from 'react-router-dom'
-import Nav from '../../components/Nav'
+import { Outlet } from 'react-router-dom'
+import Nav from '../../components/nav/Nav'
+import NavItemNotes from '../../components/nav/NavItemNotes'
+import NavItemQuotes from '../../components/nav/NavItemQuotes'
 import './Layout.css'
 
 const links = [
   {
     id: 'notes',
-    renderItem: () => <Link to="/">Notes</Link>,
+    renderItem: () => <NavItemNotes />,
   },
   {
-    id: 'notes',
-    renderItem: () => <Link to="/quotes">Quotes</Link>,
+    id: 'quotes',
+    renderItem: () => <NavItemQuotes />,
   },
 ]
 

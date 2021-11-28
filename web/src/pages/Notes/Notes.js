@@ -17,13 +17,11 @@ export const Notes = () => {
   return (
     <div className="notes__main-container">
       <ul className="notes__notes-container">
-        {notes.map((note) => {
-          return (
-            <li key={note.id}>
-              {note.doc.title} : {note.doc.text}
-            </li>
-          )
-        })}
+        {notes.map((note) => (
+          <li key={note.id}>
+            {note.doc.title} : {note.doc.text}
+          </li>
+        ))}
       </ul>
       <div className="notes__quotes-container">
         <Quote />
