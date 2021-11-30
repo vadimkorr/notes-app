@@ -12,6 +12,7 @@ import { ExpirationPlugin } from 'workbox-expiration'
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { StaleWhileRevalidate } from 'workbox-strategies'
+import { openDB, deleteDB, wrap, unwrap } from 'idb';
 
 console.log('Hello from service worker')
 
@@ -62,6 +63,55 @@ registerRoute(
       new ExpirationPlugin({ maxEntries: 50 }),
     ],
   })
+)
+
+const dbPromise = openDB('quotes', 1, {
+  upgrade(db) {
+    if (!db.objectStoreNames.contains('user-quotes')) {
+      db.createObjectStore('user-quotes', { keyPath: 'id' });
+    }
+  },
+});
+
+// how to read headers https://stackoverflow.com/questions/59087642/reading-request-headers-inside-a-service-worker
+// how to read body https://stackoverflow.com/questions/62008450/service-worker-fetch-event-for-post-request-get-body
+registerRoute(
+  // Add in any other file extensions or routing criteria as needed.
+  (event) => {
+    console.log('POST data', event)
+    return event.url.pathname === "/api/v1/user-quotes"
+  },
+  async ({url, request, event, params}) => {
+    const body = await request.clone().json();
+
+    const response = await fetch(request);
+
+    dbPromise.then((db) => {
+      const tx = db.transaction('user-quotes', 'readwrite')
+      const store = tx.objectStore('user-quotes')
+      if (body.favorite) {
+        store.put({ id: body.quote_id })
+      } else {
+        store.delete(body.quote_id)
+      }
+      return tx.complete
+    })
+    return response;
+  },
+  'POST'
+)
+
+registerRoute(
+  // Add in any other file extensions or routing criteria as needed.
+  (event) => {
+    console.log('GET data', event)
+    if (event.url.pathname === "/api/v1/user-quotes") {
+      console.log('===> /api/v1/user-quotes')
+    }
+    return false
+  },
+  new StaleWhileRevalidate(),
+  'GET'
 )
 
 // This allows the web app to trigger skipWaiting via
