@@ -14,7 +14,10 @@ export const QuoteContainer = () => {
   const fetchQuote = async () => {
     const _quote = await getRandomQuote()
     const userQuote = await getUserQuote(USER_ID, _quote.id)
-    setQuote(userQuote)
+    setQuote({
+      ..._quote,
+      favorite: userQuote.favorite
+    })
   }
 
   useEffect(() => {

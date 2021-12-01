@@ -15,7 +15,11 @@ const getUserQuote = (userId, quoteId) => {
 const addQuoteToFavorite = (userId, quoteId, favorite) =>
   userQuotes.addQuoteToFavorite(userId, quoteId, favorite)
 
-const getFavoriteQuotes = (userId) => userQuotes.getFavoriteQuotes(userId)
+const getFavoriteQuotes = (userId) =>
+  userQuotes.getFavoriteQuotes(userId).map((quote) => ({
+    ...quote,
+    favorite: true,
+  }))
 
 module.exports = {
   getUserQuote,

@@ -12,7 +12,14 @@ import { ExpirationPlugin } from 'workbox-expiration'
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { StaleWhileRevalidate } from 'workbox-strategies'
-import { openDB, deleteDB, wrap, unwrap } from 'idb';
+
+import { createUserQuotesDbClient } from './utils/sw/user-quotes'
+import {
+  getQuoteId,
+  isUrlGetUserQuoteById,
+  isUrlGetUserQuotes,
+} from './utils/sw/parse-url'
+import { getJsonResponse } from './utils/sw/response'
 
 console.log('Hello from service worker')
 
@@ -65,52 +72,62 @@ registerRoute(
   })
 )
 
-const dbPromise = openDB('quotes', 1, {
-  upgrade(db) {
-    if (!db.objectStoreNames.contains('user-quotes')) {
-      db.createObjectStore('user-quotes', { keyPath: 'id' });
-    }
-  },
-});
+const userQuotesDbClient = createUserQuotesDbClient()
 
 // how to read headers https://stackoverflow.com/questions/59087642/reading-request-headers-inside-a-service-worker
 // how to read body https://stackoverflow.com/questions/62008450/service-worker-fetch-event-for-post-request-get-body
 registerRoute(
-  // Add in any other file extensions or routing criteria as needed.
   (event) => {
     console.log('POST data', event)
-    return event.url.pathname === "/api/v1/user-quotes"
+    return event.url.pathname === '/api/v1/user-quotes'
   },
-  async ({url, request, event, params}) => {
-    const body = await request.clone().json();
+  async ({ url, request, event, params }) => {
+    const body = await request.clone().json()
 
-    const response = await fetch(request);
+    const response = await fetch(request)
 
-    dbPromise.then((db) => {
-      const tx = db.transaction('user-quotes', 'readwrite')
-      const store = tx.objectStore('user-quotes')
-      if (body.favorite) {
-        store.put({ id: body.quote_id })
-      } else {
-        store.delete(body.quote_id)
-      }
-      return tx.complete
-    })
-    return response;
+    if (body.favorite) {
+      await userQuotesDbClient.add(body.quote_id)
+    } else {
+      await userQuotesDbClient.remove(body.quote_id)
+    }
+
+    return response
   },
   'POST'
 )
 
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
-  (event) => {
-    console.log('GET data', event)
-    if (event.url.pathname === "/api/v1/user-quotes") {
-      console.log('===> /api/v1/user-quotes')
-    }
-    return false
+  ({ url }) => {
+    console.log('GET data user quotes')
+
+    // if (isUrlGetUserQuoteById(url.pathname)) {
+    //   const quoteId = getQuoteId(url.pathname)
+    // }
+    return isUrlGetUserQuotes(url.pathname)
   },
-  new StaleWhileRevalidate(),
+  async ({ url, request, event, params }) => {
+    try {
+      // make request
+      const response = await fetch(request)
+      const clone = response.clone()
+      const json = await clone.json()
+
+      // save to idb
+      await userQuotesDbClient.clear()
+      await userQuotesDbClient.addAll(json)
+
+      // return real resposne
+      return response
+    } catch (error) {
+      // check if offline
+
+      // return data from idb
+      const data = await userQuotesDbClient.getAll()
+      return getJsonResponse(data)
+    }
+  },
   'GET'
 )
 
