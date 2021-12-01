@@ -5,12 +5,17 @@ export const getQuoteId = (url) => {
   return match?.[1] || null
 }
 
-export const isUrlGetUserQuoteById = (url) => {
+export const isUrlUserQuoteById = (url) => {
   const urlRegex = new RegExp('.*/api/v1/user-quotes/(.+)', 'g')
   return urlRegex.test(url)
 }
 
-export const isUrlGetUserQuotes = (url) => {
+export const isUrlUserQuotes = (url) => {
   const urlRegex = new RegExp('.*/api/v1/user-quotes$', 'g')
+  return urlRegex.test(url)
+}
+
+export const isUrlQuotes = (url) => {
+  const urlRegex = new RegExp('.*/api/v1/quotes$', 'g')
   return urlRegex.test(url)
 }

@@ -13,13 +13,16 @@ import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { StaleWhileRevalidate } from 'workbox-strategies'
 
-import { createUserQuotesDbClient } from './utils/sw/user-quotes'
+import { createStores } from './utils/sw/store'
+import { createUserQuotesStoreClient } from './utils/sw/user-quotes'
+import { createQuotesStoreClient } from './utils/sw/quotes'
+
 import {
-  getQuoteId,
-  isUrlGetUserQuoteById,
-  isUrlGetUserQuotes,
+  isUrlUserQuoteById,
+  isUrlUserQuotes,
+  isUrlQuotes,
 } from './utils/sw/parse-url'
-import { getJsonResponse } from './utils/sw/response'
+import { getJsonResponse, makeRequest } from './utils/sw/response'
 
 console.log('Hello from service worker')
 
@@ -72,47 +75,56 @@ registerRoute(
   })
 )
 
-const userQuotesDbClient = createUserQuotesDbClient()
+const initStores = async () => {
+  const USER_QUOTES_OBJECT_STORE = 'user-quotes'
+  const QUOTES_OBJECT_STORE = 'quotes'
 
+  const db = await createStores([USER_QUOTES_OBJECT_STORE, QUOTES_OBJECT_STORE])
+  const userQuotesDbClient = createUserQuotesStoreClient(
+    USER_QUOTES_OBJECT_STORE,
+    db
+  )
+  const quotesStoreClient = createQuotesStoreClient(QUOTES_OBJECT_STORE, db)
+  return {
+    userQuotesDbClient,
+    quotesStoreClient,
+  }
+}
+
+let userQuotesDbClient
+let quotesStoreClient
+initStores().then((store) => {
+  userQuotesDbClient = store.userQuotesDbClient
+  quotesStoreClient = store.quotesStoreClient
+})
+
+/* /api/v1/user-quotes */
 // how to read headers https://stackoverflow.com/questions/59087642/reading-request-headers-inside-a-service-worker
 // how to read body https://stackoverflow.com/questions/62008450/service-worker-fetch-event-for-post-request-get-body
 registerRoute(
-  (event) => {
-    console.log('POST data', event)
-    return event.url.pathname === '/api/v1/user-quotes'
-  },
+  ({ url }) => isUrlUserQuotes(url.pathname),
   async ({ url, request, event, params }) => {
-    const body = await request.clone().json()
+    try {
+      const { quote_id, ...rest } = await request.clone().json()
+      const response = await fetch(request)
 
-    const response = await fetch(request)
+      await userQuotesDbClient.saveUserQuote({ id: quote_id, ...rest })
+      return response
+    } catch (error) {
+      // check if offline
 
-    if (body.favorite) {
-      await userQuotesDbClient.add(body.quote_id)
-    } else {
-      await userQuotesDbClient.remove(body.quote_id)
+      // save request
+      return null // TODO: what should be returned here
     }
-
-    return response
   },
   'POST'
 )
-
 registerRoute(
-  // Add in any other file extensions or routing criteria as needed.
-  ({ url }) => {
-    console.log('GET data user quotes')
-
-    // if (isUrlGetUserQuoteById(url.pathname)) {
-    //   const quoteId = getQuoteId(url.pathname)
-    // }
-    return isUrlGetUserQuotes(url.pathname)
-  },
+  ({ url }) => isUrlUserQuotes(url.pathname),
   async ({ url, request, event, params }) => {
     try {
       // make request
-      const response = await fetch(request)
-      const clone = response.clone()
-      const json = await clone.json()
+      const { response, json } = await makeRequest(request)
 
       // save to idb
       await userQuotesDbClient.clear()
@@ -125,6 +137,55 @@ registerRoute(
 
       // return data from idb
       const data = await userQuotesDbClient.getAll()
+      return getJsonResponse(data)
+    }
+  },
+  'GET'
+)
+
+/* /api/v1/user-quotes/[guid] */
+registerRoute(
+  ({ url }) => isUrlUserQuoteById(url.pathname),
+  async ({ url, request, event, params }) => {
+    try {
+      // make request
+      const { response, json: quote } = await makeRequest(request)
+
+      // save to idb
+      await userQuotesDbClient.saveUserQuote(quote)
+
+      // return real resposne
+      return response
+    } catch (error) {
+      // check if offline
+
+      // return data from idb
+      const data = await userQuotesDbClient.getAll()
+      return getJsonResponse(data)
+    }
+  },
+  'GET'
+)
+
+/* /api/v1/quotes */
+registerRoute(
+  ({ url }) => isUrlQuotes(url.pathname),
+  async ({ url, request, event, params }) => {
+    try {
+      // make request
+      const { response, json } = await makeRequest(request)
+
+      // save to idb
+      await quotesStoreClient.add(json)
+
+      // return real resposne
+      return response
+    } catch (error) {
+      console.log('error ===>', error)
+      // check if offline
+
+      // return data from idb
+      const data = await quotesStoreClient.getAny()
       return getJsonResponse(data)
     }
   },
