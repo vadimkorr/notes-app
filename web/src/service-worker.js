@@ -14,8 +14,11 @@ import { registerRoute } from 'workbox-routing'
 import { StaleWhileRevalidate } from 'workbox-strategies'
 
 import { createStores } from './utils/sw/store'
-import { createUserQuotesStoreClient } from './utils/sw/user-quotes'
-import { createQuotesStoreClient } from './utils/sw/quotes'
+import {
+  createUserQuotesStoreClient,
+  USER_QUOTES_OBJECT_STORE,
+} from './utils/sw/user-quotes'
+import { createQuotesStoreClient, QUOTES_OBJECT_STORE } from './utils/sw/quotes'
 
 import {
   isUrlUserQuoteById,
@@ -76,26 +79,16 @@ registerRoute(
 )
 
 const initStores = async () => {
-  const USER_QUOTES_OBJECT_STORE = 'user-quotes'
-  const QUOTES_OBJECT_STORE = 'quotes'
-
   const db = await createStores([USER_QUOTES_OBJECT_STORE, QUOTES_OBJECT_STORE])
-  const userQuotesDbClient = createUserQuotesStoreClient(
-    USER_QUOTES_OBJECT_STORE,
-    db
-  )
-  const quotesStoreClient = createQuotesStoreClient(QUOTES_OBJECT_STORE, db)
   return {
-    userQuotesDbClient,
-    quotesStoreClient,
+    userQuotes: createUserQuotesStoreClient(db),
+    quotes: createQuotesStoreClient(db),
   }
 }
 
-let userQuotesDbClient
-let quotesStoreClient
-initStores().then((store) => {
-  userQuotesDbClient = store.userQuotesDbClient
-  quotesStoreClient = store.quotesStoreClient
+let stores
+initStores().then((_stores) => {
+  stores = _stores
 })
 
 /* /api/v1/user-quotes */
@@ -108,7 +101,7 @@ registerRoute(
       const { quote_id, ...rest } = await request.clone().json()
       const response = await fetch(request)
 
-      await userQuotesDbClient.saveUserQuote({ id: quote_id, ...rest })
+      await stores.userQuotes.saveUserQuote({ id: quote_id, ...rest })
       return response
     } catch (error) {
       // check if offline
@@ -127,8 +120,8 @@ registerRoute(
       const { response, json } = await makeRequest(request)
 
       // save to idb
-      await userQuotesDbClient.clear()
-      await userQuotesDbClient.addAll(json)
+      await stores.userQuotes.clear()
+      await stores.userQuotes.addAll(json)
 
       // return real resposne
       return response
@@ -136,7 +129,7 @@ registerRoute(
       // check if offline
 
       // return data from idb
-      const data = await userQuotesDbClient.getAll()
+      const data = await stores.userQuotes.getAll()
       return getJsonResponse(data)
     }
   },
@@ -152,7 +145,7 @@ registerRoute(
       const { response, json: quote } = await makeRequest(request)
 
       // save to idb
-      await userQuotesDbClient.saveUserQuote(quote)
+      await stores.userQuotes.saveUserQuote(quote)
 
       // return real resposne
       return response
@@ -160,7 +153,7 @@ registerRoute(
       // check if offline
 
       // return data from idb
-      const data = await userQuotesDbClient.getAll()
+      const data = await stores.userQuotes.getAll()
       return getJsonResponse(data)
     }
   },
@@ -176,7 +169,7 @@ registerRoute(
       const { response, json } = await makeRequest(request)
 
       // save to idb
-      await quotesStoreClient.add(json)
+      await stores.quotes.add(json)
 
       // return real resposne
       return response
@@ -185,7 +178,7 @@ registerRoute(
       // check if offline
 
       // return data from idb
-      const data = await quotesStoreClient.getAny()
+      const data = await stores.quotes.getAny()
       return getJsonResponse(data)
     }
   },

@@ -1,11 +1,11 @@
-export const createQuotesStoreClient = (objectStore, db) => {
+export const QUOTES_OBJECT_STORE = 'quotes'
+
+export const createQuotesStoreClient = (db) => {
   const add = (quote) => {
-    // return dbPromise.then((db) => {
-    const tx = db.transaction(objectStore, 'readwrite')
-    const store = tx.objectStore(objectStore)
+    const tx = db.transaction(QUOTES_OBJECT_STORE, 'readwrite')
+    const store = tx.objectStore(QUOTES_OBJECT_STORE)
     store.put(quote) // quote should have field 'id'
     return tx.complete
-    // })
   }
 
   const getAny = async () => {
