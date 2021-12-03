@@ -12,6 +12,7 @@ import { ExpirationPlugin } from 'workbox-expiration'
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching'
 import { registerRoute } from 'workbox-routing'
 import { StaleWhileRevalidate } from 'workbox-strategies'
+import { BackgroundSyncPlugin, Queue } from 'workbox-background-sync'
 
 import { createStores } from './utils/sw/store'
 import {
@@ -78,6 +79,13 @@ registerRoute(
   })
 )
 
+// workbox-background-sync:quotesQueue
+const queue = new Queue('quotesQueue')
+
+// const bgSyncPlugin = new BackgroundSyncPlugin('quotesQueue', {
+//   maxRetentionTime: 24 * 60 // retry for max of 24 hours (specified in minutes)
+// });
+
 const initStores = async () => {
   const db = await createStores([USER_QUOTES_OBJECT_STORE, QUOTES_OBJECT_STORE])
   return {
@@ -91,27 +99,30 @@ initStores().then((_stores) => {
   stores = _stores
 })
 
-/* /api/v1/user-quotes */
+/* POST /api/v1/user-quotes */
 // how to read headers https://stackoverflow.com/questions/59087642/reading-request-headers-inside-a-service-worker
 // how to read body https://stackoverflow.com/questions/62008450/service-worker-fetch-event-for-post-request-get-body
 registerRoute(
   ({ url }) => isUrlUserQuotes(url.pathname),
   async ({ url, request, event, params }) => {
-    try {
-      const { quote_id, ...rest } = await request.clone().json()
-      const response = await fetch(request)
+    // Should be cloned above to prevent 'TypeError: Failed to execute 'clone' on 'Request': Request body is already used'
+    const clonedRequest = request.clone()
+    const { quote_id, ...rest } = await request.clone().json()
+    // should be saved anyway
+    await stores.userQuotes.saveUserQuote({ id: quote_id, ...rest })
 
-      await stores.userQuotes.saveUserQuote({ id: quote_id, ...rest })
+    try {
+      const response = await fetch(request)
       return response
     } catch (error) {
-      // check if offline
-
-      // save request
-      return null // TODO: what should be returned here
+      await queue.pushRequest({ request: clonedRequest })
+      return error
     }
   },
   'POST'
 )
+
+/* GET /api/v1/user-quotes */
 registerRoute(
   ({ url }) => isUrlUserQuotes(url.pathname),
   async ({ url, request, event, params }) => {
@@ -136,7 +147,7 @@ registerRoute(
   'GET'
 )
 
-/* /api/v1/user-quotes/[guid] */
+/* GET /api/v1/user-quotes/[guid] */
 registerRoute(
   ({ url }) => isUrlUserQuoteById(url.pathname),
   async ({ url, request, event, params }) => {
@@ -160,7 +171,7 @@ registerRoute(
   'GET'
 )
 
-/* /api/v1/quotes */
+/* GET /api/v1/quotes */
 registerRoute(
   ({ url }) => isUrlQuotes(url.pathname),
   async ({ url, request, event, params }) => {

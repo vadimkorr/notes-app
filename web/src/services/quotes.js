@@ -22,12 +22,14 @@ export const getUserQuotes = (userId) => {
   }).then((response) => response.json())
 }
 
-export const setFavoriteQuote = (userId, quoteId, favorite) => {
+// payload is for make it save to cache
+export const setFavoriteQuote = (userId, quoteId, favorite, payload = {}) => {
   return fetch(`${QUOTES_API_URL}/api/v1/user-quotes`, {
     method: 'POST',
     body: JSON.stringify({
       quote_id: quoteId,
       favorite,
+      ...payload,
     }),
     headers: {
       'Content-Type': 'application/json',

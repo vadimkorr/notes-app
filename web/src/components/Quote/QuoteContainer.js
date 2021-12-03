@@ -16,7 +16,7 @@ export const QuoteContainer = () => {
     const userQuote = await getUserQuote(USER_ID, _quote.id)
     setQuote({
       ..._quote,
-      favorite: userQuote.favorite
+      favorite: userQuote.favorite,
     })
   }
 
@@ -25,8 +25,12 @@ export const QuoteContainer = () => {
   }, [])
 
   const handleFavorite = (favorite) => {
-    setQuote((_quote) => ({ ..._quote, favorite }))
-    setFavoriteQuote(USER_ID, quote.id, favorite)
+    const _quote = {
+      ...quote,
+      favorite,
+    }
+    setQuote(_quote)
+    setFavoriteQuote(USER_ID, _quote.id, _quote.favorite, _quote)
   }
   const handleNext = () => {
     fetchQuote()
