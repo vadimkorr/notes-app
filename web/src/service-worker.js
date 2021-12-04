@@ -126,23 +126,39 @@ registerRoute(
 registerRoute(
   ({ url }) => isUrlUserQuotes(url.pathname),
   async ({ url, request, event, params }) => {
-    try {
-      // make request
-      const { response, json } = await makeRequest(request)
+    /* stale while revalidate */
+    const makeStaleWhileRevalidate = async () => {
+      // 1. make request and save to cache
+      makeRequest(request).then(async ({ json }) => {
+        await stores.userQuotes.clear()
+        await stores.userQuotes.addAll(json)
+      })
 
-      // save to idb
-      await stores.userQuotes.clear()
-      await stores.userQuotes.addAll(json)
-
-      // return real resposne
-      return response
-    } catch (error) {
-      // check if offline
-
-      // return data from idb
+      // 1. return from cache
       const data = await stores.userQuotes.getAll()
       return getJsonResponse(data)
     }
+
+    /* cache-first */
+    const makeCacheFirst = async () => {
+      try {
+        // 1. make request
+        const { response, json } = await makeRequest(request)
+
+        // 2. save to cache
+        await stores.userQuotes.clear()
+        await stores.userQuotes.addAll(json)
+
+        // 3. return real resposne
+        return response
+      } catch (error) {
+        // 1. return data from cache
+        const data = await stores.userQuotes.getAll()
+        return getJsonResponse(data)
+      }
+    }
+
+    return makeStaleWhileRevalidate()
   },
   'GET'
 )
