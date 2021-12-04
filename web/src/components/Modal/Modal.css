@@ -1,0 +1,23 @@
+.modal__main-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+}
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+  background-color: #000000;
+  opacity: 0.5;
+}
+.modal__content-container {
+  position: relative;
+  height: 200px;
+  width: min(300px, 90%);
+  background-color: #d3d3d3;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+}

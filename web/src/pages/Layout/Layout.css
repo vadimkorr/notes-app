@@ -12,3 +12,7 @@
 
 .layout__nav-container {
 }
+
+.layout__modal-container {
+  position: absolute;
+}

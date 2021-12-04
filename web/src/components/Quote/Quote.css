@@ -1,7 +1,7 @@
 .quote__main-container {
   display: flex;
   padding: 20px 0;
-  background-color: lightgrey;
+  background-color: #d3d3d3;
   border-radius: 20px 20px 0 0;
 
   height: 100%;

@@ -1,0 +1,32 @@
+.modal-install__content-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-install__text-container {
+  flex: 1;
+}
+.modal-install__title {
+  font-size: 18px;
+  margin: 0 0 20px 0;
+}
+.modal-install__message {
+  font-size: 14px;
+  margin: 0;
+}
+
+.modal-install__buttons-container {
+  display: flex;
+}
+.modal-install__button {
+  flex: 1;
+  margin: 3px;
+}
+.modal-install__button-no {
+  background-color: #a8a8a8;
+}
+.modal-install__button-yes {
+  background-color: #00cc65;
+}
