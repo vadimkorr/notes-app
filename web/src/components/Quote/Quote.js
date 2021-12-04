@@ -1,5 +1,5 @@
-import FavoriteButton from '../../components/FavoriteButton'
-import NextButton from '../../components/NextButton'
+import ButtonFavorite from '../../components/ButtonFavorite'
+import ButtonNext from '../../components/ButtonNext'
 import './Quote.css'
 
 export const Quote = ({ quote, favorite, onFavorite, onNext }) => {
@@ -18,8 +18,8 @@ export const Quote = ({ quote, favorite, onFavorite, onNext }) => {
         <p className="quote__author">{quote?.author || ''}</p>
       </div>
       <div className="quote__controls-container">
-        <FavoriteButton favorite={favorite} onClick={handleFavoriteClick} />
-        <NextButton onClick={handleNextQuote} />
+        <ButtonFavorite favorite={favorite} onClick={handleFavoriteClick} />
+        <ButtonNext onClick={handleNextQuote} />
       </div>
     </div>
   )
