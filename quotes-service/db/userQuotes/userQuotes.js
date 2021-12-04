@@ -1,6 +1,8 @@
 const quotes = require('../../db/quotes')
+const { createDataPersist } = require('../../utils/data-persist')
 
-const userQuotes = {} // { [userId]: [ quoteId ] }
+const { getData, saveData } = createDataPersist('tmp-user-quotes-data.json')
+const userQuotes = getData() // { [userId]: [ quoteId ] }
 
 const getIsQuoteFavorite = (userId, quoteId) =>
   Boolean(userQuotes[userId]?.find((_quoteId) => _quoteId === quoteId))
@@ -26,6 +28,7 @@ const addQuoteToFavorite = (userId, quoteId, favorite) => {
   } else {
     _setQuoteNotFavorite(userId, quoteId)
   }
+  saveData(userQuotes)
   return true
 }
 
