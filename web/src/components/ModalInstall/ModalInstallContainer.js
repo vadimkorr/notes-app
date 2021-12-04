@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useInstall } from '../../installation/useInstall'
+import { useInstall } from '../../hooks/useInstall'
 import { ModalInstall } from './ModalInstall'
 
 const TO_INSTALL_KEY = 'to_install'
