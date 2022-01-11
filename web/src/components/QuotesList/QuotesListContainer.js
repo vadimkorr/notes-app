@@ -9,7 +9,11 @@ export const QuotesListContainer = () => {
   const [userQuotes, setUserQuotes] = useState([])
 
   useEffect(() => {
-    getUserQuotes(USER_ID).then((quotes) => setUserQuotes(quotes))
+    getUserQuotes(USER_ID)
+      .then((quotes) => setUserQuotes(quotes))
+      .catch((e) => {
+        console.error(e)
+      })
   }, [])
 
   const handleRemoveClick = (quoteId) => {

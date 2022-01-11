@@ -13,6 +13,11 @@ export const QuoteContainer = () => {
 
   const fetchQuote = async () => {
     const _quote = await getRandomQuote()
+      .catch((e) => {
+        console.error(e)
+      })
+
+    if (!_quote) return
     const userQuote = await getUserQuote(USER_ID, _quote.id)
     setQuote({
       ..._quote,
