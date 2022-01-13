@@ -11,6 +11,8 @@ export const getHistory = () => {
       return cachedPush(args)
     }
     if (args && args.state && args.state.animate) {
+      // console.log('args.state.animate', args.state.animate)
+      // console.log('cachedPush', cachedPush)
       args.state.animate().then(() => {
         delete args.state.animate
         cachedPush(args)

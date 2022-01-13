@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import NoteForm from '../../components/NoteForm'
 import { getNote, updateNote } from '../../services/notes'
-import { Flipped } from 'react-flip-toolkit'
 
 import './NoteEdit.css'
 
@@ -14,9 +13,10 @@ export const NoteEdit = ({ match }) => {
   const history = useHistory()
 
   useEffect(() => {
-    setNote({ id: params.noteId })
-    getNote({ id: params.noteId }).then((data) => {
-      setNote(data)
+    const noteId = params.noteId
+    setNote({ id: noteId })
+    getNote({ id: noteId }).then((data) => {
+      setNote({ ...data, id: noteId })
     })
   }, [params.noteId])
 

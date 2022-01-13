@@ -1,4 +1,5 @@
 import { Suspense, lazy } from 'react'
+import { Router } from 'react-router'
 import {
   BrowserRouter,
   Route,
@@ -33,8 +34,16 @@ import Quotes from './Quotes'
 import { getHistory } from '../utils/history'
 const history = getHistory()
 
-const Router = () => (
-  <BrowserRouter history={history}>
+const NotesRoutes = ({ match }) => (
+  <Switch>
+    <Route path={`${match.path}/new`} component={NoteCreate} />
+    <Route path={`${match.path}/:noteId`} component={NoteEdit} />
+    <Route exact path={match.path} component={Notes} />
+  </Switch>
+)
+
+const AppRouter = () => (
+  <Router history={history}>
     {/* <Suspense fallback={<div>Загрузка...</div>}> */}
 
     <Layout>
@@ -42,20 +51,12 @@ const Router = () => (
         render={({ location }) => {
           return (
             <Flipper
-              flipKey={location.key}
+              flipKey={location.pathname}
               decisionData={{
                 location,
               }}
             >
-              <Route path="/notes">
-                <Route path="/notes/:noteId" component={NoteEdit}></Route>
-                <Route path="/notes/new">
-                  <NoteCreate />
-                </Route>
-                <Route exact path="/notes">
-                  <Notes />
-                </Route>
-              </Route>
+              <Route path="/notes" component={NotesRoutes} />
               <Route path="quotes">
                 <Quotes />
               </Route>
@@ -65,7 +66,7 @@ const Router = () => (
       />
       {/* </Suspense> */}
     </Layout>
-  </BrowserRouter>
+  </Router>
 )
 
-export default Router
+export default AppRouter

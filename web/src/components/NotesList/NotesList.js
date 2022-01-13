@@ -15,7 +15,12 @@ export const NotesList = ({ items, onAddClick, onEditClick }) => {
 
   return (
     <div className="notes-list__main-container">
-      <NoteCardAdd onClick={handleAddClick} />
+      <Flipped flipId="note-card-new">
+        <div>
+          <NoteCardAdd onClick={handleAddClick} />
+        </div>
+      </Flipped>
+
       {items.map((note) => (
         <Flipped flipId={`note-card-${note?.id}`}>
           <div

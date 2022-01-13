@@ -1,6 +1,4 @@
-import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { getInfo, getNotes } from '../../services/notes'
 import Quote from '../../components/Quote'
 import NotesList from '../../components/NotesList'
 import './Notes.css'

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import anime from 'animejs'
 
 import { Flipped } from 'react-flip-toolkit'
 import './NoteForm.css'
@@ -26,29 +27,25 @@ export const NoteForm = ({ note, onSaveClick }) => {
   }
 
   const onExit = (el) => {
-    console.log(el)
-    return el
-    // return anime({
-    //   targets: [
-    //     ...el.querySelectorAll('[data-fade-in]'),
-    //     ...el.querySelectorAll('[data-icon-nonsample]'),
-    //   ],
-    //   opacity: 0,
-    //   easing: 'easeOutSine',
-    //   duration: 350,
-    //   delay: anime.stagger(20),
-    // }).finished
+    return anime({
+      targets: [...el.querySelectorAll('[data-fade-in]')],
+      opacity: 0,
+      easing: 'easeOutSine',
+      duration: 350,
+      delay: anime.stagger(20),
+    }).finished
   }
 
   return (
-    <Flipped flipId={`note-card-${note?._id}`}>
+    <Flipped flipId={`note-card-${note?.id}`}>
       <div className="note-form__main-container" ref={elementRef}>
         <Link
+          data-fade-in
           to={{
             pathname: '/notes',
-            // state: {
-            //   animate: () => onExit(elementRef.current),
-            // },
+            state: {
+              animate: () => onExit(elementRef.current),
+            },
           }}
         >
           Back
@@ -72,6 +69,7 @@ export const NoteForm = ({ note, onSaveClick }) => {
           ></textarea>
         </Flipped>
         <button
+          data-fade-in
           className="note-form__save-button"
           type="button"
           onClick={handleSaveClick}
