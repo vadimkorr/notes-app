@@ -4,7 +4,27 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+}
+
+.note-form__header-container {
+  width: 100%;
+}
+
+.note-form__back-button {
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  text-decoration: none;
+}
+.note-form__back-button > svg {
+  margin-right: 5px;
+}
+
+.note-form__content-container {
+  flex: 1;
   padding: 25px;
+  display: flex;
+  flex-direction: column;
 }
 
 .note-form__title-input {

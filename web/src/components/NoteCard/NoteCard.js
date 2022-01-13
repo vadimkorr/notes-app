@@ -8,7 +8,7 @@ export const NoteCard = ({ item }) => {
       <Flipped flipId={`note-card__title-${item?.id}`}>
         <p className="note-card__title">{item?.title}</p>
       </Flipped>
-      <Flipped flipId={`note-card__text-${item?.id}`}>
+      <Flipped scale={false} flipId={`note-card__text-${item?.id}`}>
         <p className="note-card__text">{item?.text}</p>
       </Flipped>
     </NoteCardBase>
