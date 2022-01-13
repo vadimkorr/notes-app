@@ -1,4 +1,3 @@
-import { Outlet } from 'react-router-dom'
 import Nav from '../../components/nav/Nav'
 import NavItemNotes from '../../components/nav/NavItemNotes'
 import NavItemQuotes from '../../components/nav/NavItemQuotes'
@@ -16,11 +15,11 @@ const links = [
   },
 ]
 
-export const Layout = () => {
+export const Layout = ({ children }) => {
   return (
     <div className="layout__main-container">
       <div className="layout__content-container">
-        <Outlet />
+        {children}
       </div>
       <div className="layout__nav-container">
         <Nav links={links} />

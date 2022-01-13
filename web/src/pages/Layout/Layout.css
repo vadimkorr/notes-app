@@ -8,6 +8,10 @@
 
 .layout__content-container {
   flex: 1;
+  position: relative;
+}
+.layout__content-container > div {
+  height: 100%;
 }
 
 .layout__nav-container {

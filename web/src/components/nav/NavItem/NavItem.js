@@ -14,10 +14,10 @@ export const createNavItem =
   }
 
 export const createNavItemWrapper = (Component, to) => () => {
-  const { pathname } = useLocation()
+  const location =  useLocation()
   return (
     <Link to={to} className="nav-wrapper__main-container">
-      <Component active={pathname?.startsWith(to)} />
+      <Component active={location?.pathname?.startsWith(to)} />
     </Link>
   )
 }

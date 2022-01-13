@@ -1,5 +1,6 @@
 import NoteCard from '../../components/NoteCard'
 import NoteCardAdd from '../../components/NoteCardAdd'
+import { Flipped } from 'react-flip-toolkit'
 
 import './NotesList.css'
 
@@ -16,13 +17,15 @@ export const NotesList = ({ items, onAddClick, onEditClick }) => {
     <div className="notes-list__main-container">
       <NoteCardAdd onClick={handleAddClick} />
       {items.map((note) => (
-        <div
-          key={note.id}
-          className="notes-list__note-card-container"
-          onClick={() => handleEditClick(note.id)}
-        >
-          <NoteCard item={note.doc} />
-        </div>
+        <Flipped flipId={`note-card-${note?.id}`}>
+          <div
+            key={note.id}
+            className="notes-list__note-card-container"
+            onClick={() => handleEditClick(note.id)}
+          >
+            <NoteCard item={{ ...note, ...note.doc }} />
+          </div>
+        </Flipped>
       ))}
     </div>
   )

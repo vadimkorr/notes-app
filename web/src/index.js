@@ -5,12 +5,15 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration'
 import reportWebVitals from './reportWebVitals'
 import { sync } from './clients/db'
 import Router from './pages/Router'
+import { NotesData } from './notes-data'
 
 sync()
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router />
+    <NotesData>
+      <Router />
+    </NotesData>
   </React.StrictMode>,
   document.getElementById('root')
 )

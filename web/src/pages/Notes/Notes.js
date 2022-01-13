@@ -1,27 +1,20 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useHistory } from 'react-router-dom'
 import { getInfo, getNotes } from '../../services/notes'
 import Quote from '../../components/Quote'
 import NotesList from '../../components/NotesList'
 import './Notes.css'
+import { useNotes } from '../../notes-data'
 
 export const Notes = () => {
-  const navigate = useNavigate()
-  const [notes, setNotes] = useState([])
-
-  useEffect(() => {
-    getInfo()
-    // putNote({ title: 'new note', text: 'hello' })
-    getNotes().then((values) => {
-      setNotes(values)
-    })
-  }, [])
+  const history = useHistory()
+  const { notes } = useNotes()
 
   const handleAddClick = () => {
-    navigate('/notes/new')
+    history.push('/notes/new')
   }
   const handleEditClick = (noteId) => {
-    navigate(`/notes/${noteId}`)
+    history.push(`/notes/${noteId}`)
   }
 
   return (

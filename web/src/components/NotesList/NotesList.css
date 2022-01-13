@@ -43,4 +43,5 @@
 
 .notes-list__note-card-container {
   height: 200px;
+  transition: all;
 }

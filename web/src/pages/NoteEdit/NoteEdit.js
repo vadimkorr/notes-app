@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import NoteForm from '../../components/NoteForm'
 import { getNote, updateNote } from '../../services/notes'
+import { Flipped } from 'react-flip-toolkit'
 
 import './NoteEdit.css'
 
-export const NoteEdit = () => {
-  const [note, setNote] = useState()
+export const NoteEdit = ({ match }) => {
+  const { params: { noteId } = {} } = match
+
+  const [note, setNote] = useState({ id: noteId })
   const params = useParams()
-  const navigate = useNavigate()
+  const history = useHistory()
 
   useEffect(() => {
+    setNote({ id: params.noteId })
     getNote({ id: params.noteId }).then((data) => {
       setNote(data)
     })
@@ -18,7 +22,7 @@ export const NoteEdit = () => {
 
   const handleSaveClick = ({ title, text }) => {
     updateNote({ note, title, text }).then(() => {
-      navigate('/notes')
+      history.push('/notes')
     })
   }
 
