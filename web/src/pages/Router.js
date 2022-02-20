@@ -57,7 +57,7 @@ const AppRouter = () => (
               }}
             >
               <Route path="/notes" component={NotesRoutes} />
-              <Route path="quotes">
+              <Route path="/quotes">
                 <Quotes />
               </Route>
             </Flipper>
